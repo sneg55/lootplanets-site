@@ -149,7 +149,7 @@ function App(): React.ReactElement {
             <Button
               onClick={onMintPlanetWithLootClick}
               disabled={lootBalance === 0}
-              reason={'You should have $LOOT in your wallet to be able to call mintWithLoot'}>
+              reason={'You should have $LOOT in your wallet to call this method'}>
               Mint planet with Loot!
             </Button>
           </section>
