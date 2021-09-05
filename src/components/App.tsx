@@ -8,17 +8,21 @@ import {
   getClaimedTokenIds,
   getLootTokenBalance,
   getPlanetsWithLootTokenBalance,
+  getThreeRandomPlanets,
   hasLootToken,
   mintPlanet,
   mintWithLootPlanet,
+  PlanetData,
 } from '../services/contractInteraction'
 import Button from './Button'
 import { ConnectWallet } from './ConnectWallet'
 import ErrorMessage from './ErrorMessage'
+import PlanetCard from './PlanetCard'
 
 function App(): React.ReactElement {
   const { activate, chainId, account, library } = useWeb3React()
   const [errorMsg, setErrorMsg] = React.useState<string | undefined>(undefined)
+  const [planetExamples, setPlanetExamples] = React.useState<PlanetData[] | undefined>(undefined)
   const [ownedIds, setOwnedIds] = React.useState<number[] | undefined>(undefined)
   const [lootBalance, setLootBalance] = React.useState<number | undefined>(undefined)
   const [selectedTokenId, setSelectedTokenId] = React.useState<number | undefined>(undefined)
@@ -26,7 +30,7 @@ function App(): React.ReactElement {
     undefined
   )
 
-  if (chainId !== 1) {
+  if (chainId !== undefined && chainId !== 1) {
     !errorMsg?.startsWith('Unsapported chain') &&
       setErrorMsg(`Unsapported chain Id ${chainId}. Please switch to chainId 1`)
   }
@@ -38,6 +42,7 @@ function App(): React.ReactElement {
         PlanetsWithLoot.address
       )
       getClaimedTokenIds(planetsWithLootContract).then(setOwnedIds)
+      getThreeRandomPlanets(library).then(setPlanetExamples)
     }
   }, [library])
   React.useEffect(() => {
@@ -160,7 +165,7 @@ function App(): React.ReactElement {
           </section>
         )}
         {ownedIds && ownedIds.length > 0 && (
-          <section className="grid">
+          <section>
             <p>
               You are able to select not-claimed token ID in range 8001-12000 and click Mint Planet!
               to mint desired token. Otherwise you will mint random token id. This feature doesn't
@@ -188,6 +193,13 @@ function App(): React.ReactElement {
           </section>
         )}
 
+        {planetExamples && (
+          <section>
+            {planetExamples.map((e) => (
+              <PlanetCard {...e} key={`planet-${e.tokenId}`} />
+            ))}
+          </section>
+        )}
         <footer>
           <a
             href="https://github.com/sneg55/lootplanets-site"
