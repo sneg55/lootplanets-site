@@ -11,7 +11,7 @@ function Button({ children, onClick, disabled, reason }: IButtonProps): React.Re
       <button onClick={onClick} disabled={disabled === true}>
         {children}
       </button>
-      {reason && <span>{reason}</span>}
+      {disabled === true && reason && <span>{reason}</span>}
     </div>
   )
 }
