@@ -4,7 +4,11 @@ import { Contract } from 'web3-eth-contract'
 import Loot from '../contracts/Loot'
 import PlanetsWithLoot from '../contracts/PlanetsWithLoot'
 
-export const mintPlanet = async (account: string, web3: Web3): Promise<void> => {
+export const mintPlanet = async (
+  account: string,
+  web3: Web3,
+  selectedTokenId?: number
+): Promise<void> => {
   const planetIds = fillArrayRange(8001, 12000)
   const planetsWithLootContract = new web3.eth.Contract(
     PlanetsWithLoot.abi,
@@ -14,8 +18,11 @@ export const mintPlanet = async (account: string, web3: Web3): Promise<void> => 
   const claimedTokenIds = await getClaimedTokenIds(planetsWithLootContract)
   const availablePlanetIds = planetIds.filter((el) => !claimedTokenIds.includes(el))
   const randomPlanetId = availablePlanetIds[Math.floor(Math.random() * availablePlanetIds.length)]
-
-  await planetsWithLootContract.methods.mint(new BigNumber(randomPlanetId)).send({
+  const tokenId =
+    selectedTokenId && selectedTokenId >= 8001 && selectedTokenId <= 12000
+      ? selectedTokenId
+      : randomPlanetId
+  await planetsWithLootContract.methods.mint(new BigNumber(tokenId)).send({
     from: account,
     value: new BigNumber(payableAmount).times(10 ** 18),
   })
@@ -33,16 +40,16 @@ export const mintWithLootPlanet = async (account: string, web3: Web3): Promise<v
   })
 }
 
-const getClaimedTokenIds = async (contract: Contract): Promise<number[]> => {
+export const getClaimedTokenIds = async (contract: Contract): Promise<number[]> => {
   const transferEventsData = await contract.getPastEvents('Transfer', {
     fromBlock: 12865228,
     toBlock: 'latest',
   })
   const claimedTokenIds = transferEventsData.map((e) => e.returnValues['tokenId'])
-  return claimedTokenIds.map(parseInt)
+  return claimedTokenIds.map((e) => parseInt(e))
 }
 
-const fillArrayRange = (start: number, end: number): number[] => {
+export const fillArrayRange = (start: number, end: number): number[] => {
   const array = []
   for (let i = start; i <= end; i++) {
     array.push(i)

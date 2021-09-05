@@ -1,8 +1,11 @@
 import { useWeb3React } from '@web3-react/core'
 import React from 'react'
+import PlanetsWithLoot from '../contracts/PlanetsWithLoot'
 import { useEagerConnect, useInactiveListener } from '../hooks.ts/web3-react-hooks'
 import { injected } from '../services/connectors'
 import {
+  fillArrayRange,
+  getClaimedTokenIds,
   getLootTokenBalance,
   getPlanetsWithLootTokenBalance,
   hasLootToken,
@@ -16,7 +19,9 @@ import ErrorMessage from './ErrorMessage'
 function App(): React.ReactElement {
   const { activate, chainId, account, library } = useWeb3React()
   const [errorMsg, setErrorMsg] = React.useState<string | undefined>(undefined)
+  const [ownedIds, setOwnedIds] = React.useState<number[] | undefined>(undefined)
   const [lootBalance, setLootBalance] = React.useState<number | undefined>(undefined)
+  const [selectedTokenId, setSelectedTokenId] = React.useState<number | undefined>(undefined)
   const [planetsWithLootBalance, setPlanetsWithLootBalance] = React.useState<number | undefined>(
     undefined
   )
@@ -26,6 +31,15 @@ function App(): React.ReactElement {
       setErrorMsg(`Unsapported chain Id ${chainId}. Please switch to chainId 1`)
   }
 
+  React.useEffect(() => {
+    if (library) {
+      const planetsWithLootContract = new library.eth.Contract(
+        PlanetsWithLoot.abi,
+        PlanetsWithLoot.address
+      )
+      getClaimedTokenIds(planetsWithLootContract).then(setOwnedIds)
+    }
+  }, [library])
   React.useEffect(() => {
     if (chainId !== 1) {
       setErrorMsg(`Unsapported chain Id ${chainId}. Please switch to chainId 1`)
@@ -51,7 +65,7 @@ function App(): React.ReactElement {
   }
   const onMintPlanetClick = async (): Promise<void> => {
     if (account) {
-      await mintPlanet(account, library)
+      await mintPlanet(account, library, selectedTokenId)
     }
   }
   const onMintPlanetWithLootClick = async (): Promise<void> => {
@@ -84,7 +98,6 @@ function App(): React.ReactElement {
 
   // handle logic to connect in reaction to certain events on the injected ethereum provider, if it exists
   useInactiveListener(!triedEager)
-
   return (
     <>
       <main>
@@ -141,19 +154,47 @@ function App(): React.ReactElement {
             </Button>
           </section>
         )}
-      </main>
+        {ownedIds && ownedIds.length > 0 && (
+          <section className="grid">
+            <p>
+              You are able to select not-claimed token ID in range 8001-12000 and click Mint Planet!
+              to mint desired token. Otherwise you will mint random token id. This feature doesn't
+              work for Mint Planet with Loot (only random token could be minted using this method)
+            </p>
+            {selectedTokenId && <div className="selected-id">Selected ID {selectedTokenId}</div>}
+            <div className="grid-container">
+              {fillArrayRange(0, 12000).map((n, i) => {
+                const isOwned = ownedIds.includes(n)
+                const style = isOwned ? { backgroundColor: 'rgb(180, 180, 180)' } : {}
+                return (
+                  <div
+                    onClick={(): void => {
+                      if (isOwned === false) {
+                        setSelectedTokenId(n)
+                      }
+                    }}
+                    key={i}
+                    style={style}
+                    title={i.toString()}
+                    className={selectedTokenId === n ? 'selected grid-item' : 'grid-item'}></div>
+                )
+              })}
+            </div>
+          </section>
+        )}
 
-      <footer>
-        <a href="https://twitter.com/LootPlanets" target="_blank" rel="noreferrer noopener">
-          Twitter
-        </a>
-        <a
-          href="https://etherscan.io/address/0x15e32bac6c5f89c66631f3a8391bc49eacc03985"
-          target="_blank"
-          rel="noreferrer noopener">
-          Etherscan
-        </a>
-      </footer>
+        <footer>
+          <a href="https://twitter.com/LootPlanets" target="_blank" rel="noreferrer noopener">
+            Twitter
+          </a>
+          <a
+            href="https://etherscan.io/address/0x15e32bac6c5f89c66631f3a8391bc49eacc03985"
+            target="_blank"
+            rel="noreferrer noopener">
+            Etherscan
+          </a>
+        </footer>
+      </main>
     </>
   )
 }
