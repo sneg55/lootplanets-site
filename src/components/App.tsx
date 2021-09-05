@@ -2,12 +2,20 @@ import { useWeb3React } from '@web3-react/core'
 import React from 'react'
 import { useEagerConnect, useInactiveListener } from '../hooks.ts/web3-react-hooks'
 import { injected } from '../services/connectors'
-import { mintPlanet } from '../services/contractInteraction'
+import { hasLootToken, mintPlanet } from '../services/contractInteraction'
 import Button from './Button'
 import { ConnectWallet } from './ConnectWallet'
+import ErrorMessage from './ErrorMessage'
 
 function App(): React.ReactElement {
   const { activate, chainId, account, library } = useWeb3React()
+  const [errorMsg, setErrorMsg] = React.useState<string | undefined>(undefined)
+
+  React.useEffect(() => {
+    if (chainId !== 1) {
+      setErrorMsg(`Unsapported chain Id {chainId}. Please switch to chainId 1`)
+    }
+  }, [chainId])
 
   const onConnectClick = (): void => {
     activate(injected, console.error)
@@ -18,7 +26,14 @@ function App(): React.ReactElement {
     }
   }
   const onMintPlanetWithLootClick = async (): Promise<void> => {
-    console.log('pom')
+    if (!account) {
+      setErrorMsg(`Please connect your Wallet`)
+      return
+    }
+    const hasLootInWallet = await hasLootToken(account, library)
+    if (!hasLootInWallet) {
+      setErrorMsg('You should have $LOOT in your wallet to be able to call mintWithLoot')
+    }
   }
   console.log(chainId)
 
@@ -31,8 +46,8 @@ function App(): React.ReactElement {
   return (
     <main>
       <h1>Planets with Loot</h1>
-      {chainId !== 1 && <div>Unsapported chain Id {chainId}. Please switch to chainId 1</div>}
-      <h2>your address: {account}</h2>
+      {errorMsg && <ErrorMessage message={errorMsg} />}
+      {account && <h2>You are connected as {account}</h2>}
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
         labore et dolore magna aliqua. Enim eu turpis egestas pretium aenean pharetra magna ac
@@ -42,9 +57,17 @@ function App(): React.ReactElement {
         turpis tincidunt id aliquet risus feugiat. Et tortor at risus viverra adipiscing at in
         tellus integer. Ut aliquam purus sit amet luctus.
       </p>
-      {!account && <ConnectWallet onConnectClick={onConnectClick} />}
-      <Button onClick={onMintPlanetClick}>Mint planet!</Button>
-      <Button onClick={onMintPlanetWithLootClick}>Mint planet with Loot!</Button>
+      {!account && (
+        <div>
+          <ConnectWallet onConnectClick={onConnectClick} />
+        </div>
+      )}
+      {account && (
+        <div>
+          <Button onClick={onMintPlanetClick}>Mint planet!</Button>
+          <Button onClick={onMintPlanetWithLootClick}>Mint planet with Loot!</Button>
+        </div>
+      )}
     </main>
   )
 }

@@ -1,5 +1,6 @@
+import { AbiItem } from 'web3-utils'
 const address = '0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7'
-const abi = [
+const abi: AbiItem[] = [
   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
   {
     anonymous: false,
@@ -269,4 +270,5 @@ const abi = [
     type: 'function',
   },
 ]
-export default { address, abi }
+const Loot = { address, abi }
+export default Loot
