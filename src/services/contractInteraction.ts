@@ -22,9 +22,9 @@ export const mintPlanet = async (
     selectedTokenId && selectedTokenId >= 8001 && selectedTokenId <= 12000
       ? selectedTokenId
       : randomPlanetId
-  await planetsWithLootContract.methods.mint(new BigNumber(tokenId)).send({
+  await planetsWithLootContract.methods.mint(tokenId).send({
     from: account,
-    value: new BigNumber(payableAmount).times(10 ** 18),
+    value: new BigNumber(payableAmount).times(10 ** 18).toFixed(),
   })
 }
 
