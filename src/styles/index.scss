@@ -65,10 +65,11 @@ button {
 }
 
 footer {
-  margin: 20px;
-  width: 200px;
   display: flex;
   justify-content: space-around;
+  & a + a {
+    margin-left: 30px;
+  }
 }
 
 a:-webkit-any-link {

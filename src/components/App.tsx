@@ -189,6 +189,12 @@ function App(): React.ReactElement {
         )}
 
         <footer>
+          <a
+            href="https://github.com/sneg55/lootplanets-site"
+            target="_blank"
+            rel="noreferrer noopener">
+            Github
+          </a>
           <a href="https://twitter.com/LootPlanets" target="_blank" rel="noreferrer noopener">
             Twitter
           </a>
