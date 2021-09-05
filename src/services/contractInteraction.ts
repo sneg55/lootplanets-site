@@ -109,12 +109,8 @@ export type TokenURIData = {
   attributes: TokenURIAttributes[]
 }
 
-export const getPlanetData = async (web3: Web3, tokenId: number): Promise<PlanetData> => {
-  const planetsWithLootContract = new web3.eth.Contract(
-    PlanetsWithLoot.abi,
-    PlanetsWithLoot.address
-  )
-  const tokenURI = await planetsWithLootContract.methods.tokenURI(tokenId).call()
+export const getPlanetData = async (tokenId: number): Promise<PlanetData> => {
+  const tokenURI = `https://gateway.pinata.cloud/ipfs/QmbEKx9dFrLWHmNUHbUwBCSA5pojaGpSVEHYChXAC1vqNM/${tokenId}`
   const tokenURIData: TokenURIData = await fetch(tokenURI).then((res) => res.json())
   const image = tokenURIData.image
   const water = tokenURIData.attributes.find((e) => e.trait_type === 'Water')?.value
@@ -126,23 +122,17 @@ export const getPlanetData = async (web3: Web3, tokenId: number): Promise<Planet
   return { tokenId, name, organisms, rings, terrain, resource, water, image, tokenURIData }
 }
 
-export const getThreeRandomPlanets = async (web3: Web3): Promise<PlanetData[]> => {
+export const getThreeRandomPlanets = async (): Promise<PlanetData[]> => {
   const result = []
 
-  const planetsWithLootContract = new web3.eth.Contract(
-    PlanetsWithLoot.abi,
-    PlanetsWithLoot.address
-  )
-  // tokenURI data could be fetched only for claimed tokens. Otherwise you will get `Error: Returned error: execution reverted: ERC721Metadata: URI query for nonexistent token` error
-  const claimedTokenIds = await getClaimedTokenIds(planetsWithLootContract)
   // Shuffle array
-  const shuffled = claimedTokenIds.sort(() => 0.5 - Math.random())
+  const shuffled = fillArrayRange(0, 12000).sort(() => 0.5 - Math.random())
   // Get sub-array of first n elements after shuffled
   const randomPlanetsIds = shuffled.slice(0, 3)
 
   for (let i = 0; i <= 2; i++) {
     const tokenId = randomPlanetsIds[i]
-    const planetData = await getPlanetData(web3, tokenId)
+    const planetData = await getPlanetData(tokenId)
     result.push(planetData)
   }
   return result
