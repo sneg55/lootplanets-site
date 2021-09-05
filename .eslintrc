@@ -1,0 +1,47 @@
+{
+    "parser": "@typescript-eslint/parser", // Specifies the ESLint parser
+    "parserOptions": {
+      "ecmaVersion": 2020, // Allows for the parsing of modern ECMAScript features
+      "sourceType": "module" // Allows for the use of imports
+    },
+    "extends": [
+      "react-app",
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:prettier/recommended"
+    ],
+    "plugins": ["unused-imports"],
+    "rules": {
+      "jsx-a11y/alt-text": "error",
+      "react/jsx-no-target-blank": "error",
+      "array-callback-return": "error",
+      "no-unused-vars": "error",
+      "curly": "error",
+      "no-extra-semi": "error",
+      "unused-imports/no-unused-imports": "error",
+      "unused-imports/no-unused-vars": [
+        "error",
+        {
+          "vars": "all",
+          "varsIgnorePattern": "^_",
+          "args": "after-used",
+          "argsIgnorePattern": "^_"
+        }
+      ],
+      "prettier/prettier": [
+        "error",
+        {
+          "endOfLine": "auto"
+        }
+      ],
+      "react-hooks/exhaustive-deps": "off",
+      "no-useless-computed-key": "off",
+      "default-case": "error",
+      "react/jsx-no-duplicate-props": "error",
+      "no-new-wrappers": "off",
+      "@typescript-eslint/explicit-function-return-type": "error",
+      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/no-non-null-assertion": "error"
+    }
+  }
+  
