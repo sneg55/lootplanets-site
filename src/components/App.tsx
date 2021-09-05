@@ -42,7 +42,7 @@ function App(): React.ReactElement {
         PlanetsWithLoot.address
       )
       getClaimedTokenIds(planetsWithLootContract).then(setOwnedIds)
-      getThreeRandomPlanets().then(setPlanetExamples)
+      getThreeRandomPlanets(library).then(setPlanetExamples)
     }
   }, [library])
   React.useEffect(() => {
