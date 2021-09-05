@@ -113,6 +113,12 @@ h2 {
 }
 
 .planet-container {
+  &:hover {
+    transform: translateY(-10px);
+    transition: 0.2s ease;
+  }
+
+  transition: 0.2s ease;
   img {
     width: 100%;
     height: auto;

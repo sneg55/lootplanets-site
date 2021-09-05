@@ -137,13 +137,11 @@ export const getThreeRandomPlanets = async (web3: Web3): Promise<PlanetData[]> =
   const claimedTokenIds = await getClaimedTokenIds(planetsWithLootContract)
   // Shuffle array
   const shuffled = claimedTokenIds.sort(() => 0.5 - Math.random())
-
   // Get sub-array of first n elements after shuffled
   const randomPlanetsIds = shuffled.slice(0, 3)
+
   for (let i = 0; i <= 2; i++) {
     const tokenId = randomPlanetsIds[i]
-
-    console.log(tokenId)
     const planetData = await getPlanetData(web3, tokenId)
     result.push(planetData)
   }

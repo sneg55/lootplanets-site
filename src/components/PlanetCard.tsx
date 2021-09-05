@@ -2,7 +2,11 @@ import React from 'react'
 import { PlanetData } from '../services/contractInteraction'
 function PlanetCard(props: PlanetData): React.ReactElement {
   return (
-    <div className="planet-container">
+    <a
+      href={`https://opensea.io/assets/0x15e32bac6c5f89c66631f3a8391bc49eacc03985/${props.tokenId}`}
+      target="_blank"
+      rel="noreferrer noopener"
+      className="planet-container">
       <img width="250px" src={props.image} alt="planet" />
       {/* In the image there is all info you needed is rendered*/}
       {/* <div className="attributes">
@@ -12,7 +16,7 @@ function PlanetCard(props: PlanetData): React.ReactElement {
           ))}
         </ul>
       </div> */}
-    </div>
+    </a>
   )
 }
 export default PlanetCard
