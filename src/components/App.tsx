@@ -2,7 +2,12 @@ import { useWeb3React } from '@web3-react/core'
 import React from 'react'
 import { useEagerConnect, useInactiveListener } from '../hooks.ts/web3-react-hooks'
 import { injected } from '../services/connectors'
-import { hasLootToken, mintPlanet } from '../services/contractInteraction'
+import {
+  getLootTokenBalance,
+  getPlanetsWithLootTokenBalance,
+  hasLootToken,
+  mintPlanet,
+} from '../services/contractInteraction'
 import Button from './Button'
 import { ConnectWallet } from './ConnectWallet'
 import ErrorMessage from './ErrorMessage'
@@ -10,6 +15,15 @@ import ErrorMessage from './ErrorMessage'
 function App(): React.ReactElement {
   const { activate, chainId, account, library } = useWeb3React()
   const [errorMsg, setErrorMsg] = React.useState<string | undefined>(undefined)
+  const [lootBalance, setLootBalance] = React.useState<number | undefined>(undefined)
+  const [planetsWithLootBalance, setPlanetsWithLootBalance] = React.useState<number | undefined>(
+    undefined
+  )
+
+  if (chainId !== 1) {
+    !errorMsg?.startsWith('Unsapported chain') &&
+      setErrorMsg(`Unsapported chain Id ${chainId}. Please switch to chainId 1`)
+  }
 
   React.useEffect(() => {
     if (chainId !== 1) {
@@ -18,6 +32,18 @@ function App(): React.ReactElement {
       errorMsg?.startsWith('Unsapported chain') && setErrorMsg(undefined)
     }
   }, [chainId])
+
+  React.useEffect(() => {
+    if (!account) {
+      setErrorMsg(`Please connect your Wallet`)
+    } else {
+      errorMsg?.startsWith('Please connect your') && setErrorMsg(undefined)
+      getLootTokenBalance(account, library).then((resp) => setLootBalance(resp.toNumber()))
+      getPlanetsWithLootTokenBalance(account, library).then((resp) =>
+        setPlanetsWithLootBalance(resp.toNumber())
+      )
+    }
+  }, [account])
 
   const onConnectClick = (): void => {
     activate(injected, console.error)
@@ -29,7 +55,7 @@ function App(): React.ReactElement {
   }
   const onMintPlanetWithLootClick = async (): Promise<void> => {
     if (!account) {
-      setErrorMsg(`Please connect your Wallet`)
+      setErrorMsg(`Please connect your Wallet!`)
       return
     }
     const hasLootInWallet = await hasLootToken(account, library)
@@ -59,28 +85,57 @@ function App(): React.ReactElement {
   return (
     <main>
       <h1>Planets with Loot</h1>
-      {errorMsg && <ErrorMessage message={errorMsg} />}
-      {account && <h2>You are connected as {account}</h2>}
+      <h2>
+        Planets with Loot. Randomized Planets generated and stored on-chain. Because your Heroes
+        need a place in the Universe to live too.
+      </h2>
+      <ul>
+        <li>
+          0-8000 is reserved for{' '}
+          <a
+            href="https://twitter.com/search?q=%24Loot&src=cashtag_click"
+            target="_blank"
+            rel="noreferrer noopener">
+            $LOOT
+          </a>{' '}
+          Holders
+        </li>
+
+        <li>8001-12000 is open for minting at 0.05 ETH</li>
+      </ul>
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-        labore et dolore magna aliqua. Enim eu turpis egestas pretium aenean pharetra magna ac
-        placerat. Non diam phasellus vestibulum lorem. Faucibus turpis in eu mi bibendum neque. Urna
-        cursus eget nunc scelerisque viverra. Tempus urna et pharetra pharetra massa massa ultricies
-        mi. Quis varius quam quisque id diam vel. Ligula ullamcorper malesuada proin libero. Sed
-        turpis tincidunt id aliquet risus feugiat. Et tortor at risus viverra adipiscing at in
-        tellus integer. Ut aliquam purus sit amet luctus.
+        Keep in mind that mintWithLoot function would be available only until Thu Sep 30 2021
+        21:59:59 GMT+0000
       </p>
-      {chainId !== 1 && <Button onClick={onMainnetSwitchClick}>Switch to Ethereum Mainnet</Button>}
-      {!account && chainId === 1 && (
-        <div>
-          <ConnectWallet onConnectClick={onConnectClick} />
-        </div>
-      )}
+      {errorMsg && <ErrorMessage message={errorMsg} />}
+      {account && <h4>You are connected as {account}</h4>}
       {account && (
         <div>
-          <Button onClick={onMintPlanetClick}>Mint planet!</Button>
-          <Button onClick={onMintPlanetWithLootClick}>Mint planet with Loot!</Button>
+          <div>$LOOT balance: {lootBalance || 0}</div>
+          <div>$PLTL balance: {planetsWithLootBalance || 0}</div>
         </div>
+      )}
+
+      {account && chainId !== 1 && (
+        <section className="actions">
+          <Button onClick={onMainnetSwitchClick}>Switch to Ethereum Mainnet</Button>{' '}
+        </section>
+      )}
+      {!account && (
+        <section className="actions">
+          <ConnectWallet onConnectClick={onConnectClick} />
+        </section>
+      )}
+      {account && chainId === 1 && (
+        <section className="actions">
+          <Button onClick={onMintPlanetClick}>Mint planet!</Button>
+          <Button
+            onClick={onMintPlanetWithLootClick}
+            disabled={lootBalance === 0}
+            reason={'You should have $LOOT in your wallet to be able to call mintWithLoot'}>
+            Mint planet with Loot!
+          </Button>
+        </section>
       )}
     </main>
   )

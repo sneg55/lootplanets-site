@@ -4,6 +4,8 @@ import App from './components/App'
 import { Web3ReactProvider } from '@web3-react/core'
 import Web3 from 'web3'
 import { AbstractConnector } from '@web3-react/abstract-connector'
+import 'normalize.css'
+import './styles/index.scss'
 // import your favorite web3 convenience library here
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

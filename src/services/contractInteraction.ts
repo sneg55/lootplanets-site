@@ -56,6 +56,18 @@ export const getLootTokenBalance = async (account: string, web3: Web3): Promise<
   return new BigNumber(lootBalance)
 }
 
+export const getPlanetsWithLootTokenBalance = async (
+  account: string,
+  web3: Web3
+): Promise<BigNumber> => {
+  const planetsWithLootContract = new web3.eth.Contract(
+    PlanetsWithLoot.abi,
+    PlanetsWithLoot.address
+  )
+  const planetsWithLootBalance = await planetsWithLootContract.methods.balanceOf(account).call()
+  return new BigNumber(planetsWithLootBalance)
+}
+
 export const hasLootToken = async (account: string, web3: Web3): Promise<boolean> => {
   const lootBalance = await getLootTokenBalance(account, web3)
   return lootBalance.gt(0)
