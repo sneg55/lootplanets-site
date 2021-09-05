@@ -103,14 +103,14 @@ function App(): React.ReactElement {
       <main>
         <h1>Planets with Loot</h1>
         <h2>
-          Planets with Loot. Randomized Planets generated and stored on-chain. Because your Heroes
+          Randomized Planets generated and stored on-chain. Because your Heroes
           need a place in the Universe to live too.
         </h2>
         <ul>
           <li>
-            0-8000 is reserved for{' '}
+            Planets ID 0-8000 are free to mint and reserved for{' '}
             <a
-              href="https://twitter.com/search?q=%24Loot&src=cashtag_click"
+              href="https://etherscan.io/address/0xff9c1b15b16263c61d017ee9f65c50e4ae0113d7"
               target="_blank"
               rel="noreferrer noopener">
               $LOOT
@@ -118,11 +118,11 @@ function App(): React.ReactElement {
             Holders
           </li>
 
-          <li>8001-12000 is open for minting at 0.05 ETH</li>
+          <li>Planets ID 8001-12000 are open for minting at 0.05 ETH</li>
         </ul>
         <p>
           Keep in mind that mintWithLoot function would be available only until Thu Sep 30 2021
-          21:59:59 GMT+0000
+          21:59:59 GMT+0000.
         </p>
         {errorMsg && <ErrorMessage message={errorMsg} />}
         {account && <h4>You are connected as {account}</h4>}
@@ -204,6 +204,13 @@ function App(): React.ReactElement {
             rel="noreferrer noopener">
             Etherscan
           </a>
+          <a
+            href="https://discord.gg/q3RGnzPxbV"
+            target="_blank"
+            rel="noreferrer noopener">
+            Discord
+          </a>
+
         </footer>
       </main>
     </>
