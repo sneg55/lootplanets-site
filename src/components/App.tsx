@@ -145,7 +145,12 @@ function App(): React.ReactElement {
         )}
         {account && chainId === 1 && (
           <section className="actions">
-            <Button onClick={onMintPlanetClick}>Mint planet!</Button>
+            <Button
+              onClick={onMintPlanetClick}
+              disabled={selectedTokenId !== undefined && selectedTokenId < 8001}
+              reason={'You should select ID in range 8001-12000'}>
+              Mint planet!
+            </Button>
             <Button
               onClick={onMintPlanetWithLootClick}
               disabled={lootBalance === 0}
