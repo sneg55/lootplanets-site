@@ -210,6 +210,12 @@ function App(): React.ReactElement {
             rel="noreferrer noopener">
             Discord
           </a>
+          <a
+            href="https://www.lootproject.com/resources"
+            target="_blank"
+            rel="noreferrer noopener">
+            Loot Derivatives at lootproject.com 
+          </a>
 
         </footer>
       </main>
