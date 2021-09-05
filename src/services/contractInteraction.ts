@@ -88,13 +88,13 @@ export const getLootId = async (account: string, index: number, web3: Web3): Pro
 
 export type PlanetData = {
   image: string
-  name: string
-  organisms: string
-  resource: string
-  rings: number
-  terrain: string
+  name?: string
+  organisms?: string
+  resource?: string
+  rings?: string
+  terrain?: string
   tokenId: number
-  water: string
+  water?: string
   tokenURIData: TokenURIData
 }
 
@@ -117,12 +117,12 @@ export const getPlanetData = async (web3: Web3, tokenId: number): Promise<Planet
   const tokenURI = await planetsWithLootContract.methods.tokenURI(tokenId).call()
   const tokenURIData: TokenURIData = await fetch(tokenURI).then((res) => res.json())
   const image = tokenURIData.image
-  const name = await planetsWithLootContract.methods.getName(tokenId).call()
-  const organisms = await planetsWithLootContract.methods.getOrganisms(tokenId).call()
-  const rings = await planetsWithLootContract.methods.getName(tokenId).call()
-  const terrain = await planetsWithLootContract.methods.getTerrain(tokenId).call()
-  const resource = await planetsWithLootContract.methods.getMetal(tokenId).call()
-  const water = await planetsWithLootContract.methods.getWater(tokenId).call()
+  const water = tokenURIData.attributes.find((e) => e.trait_type === 'Water')?.value
+  const organisms = tokenURIData.attributes.find((e) => e.trait_type === 'Organisms')?.value
+  const terrain = tokenURIData.attributes.find((e) => e.trait_type === 'Terrain')?.value
+  const name = tokenURIData.attributes.find((e) => e.trait_type === 'Name')?.value
+  const rings = tokenURIData.attributes.find((e) => e.trait_type === 'Rings')?.value
+  const resource = tokenURIData.attributes.find((e) => e.trait_type === 'Resource')?.value
   return { tokenId, name, organisms, rings, terrain, resource, water, image, tokenURIData }
 }
 

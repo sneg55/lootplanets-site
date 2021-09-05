@@ -165,40 +165,47 @@ function App(): React.ReactElement {
           </section>
         )}
         {ownedIds && ownedIds.length > 0 && (
-          <section>
-            <p>
-              You are able to select not-claimed token ID in range 8001-12000 and click Mint Planet!
-              to mint desired token. Otherwise you will mint random token id. This feature doesn't
-              work for Mint Planet with Loot (only random token could be minted using this method)
-            </p>
-            {selectedTokenId && <div className="selected-id">Selected ID {selectedTokenId}</div>}
-            <div className="grid-container">
-              {fillArrayRange(0, 12000).map((n, i) => {
-                const isOwned = ownedIds.includes(n)
-                const style = isOwned ? { backgroundColor: 'rgb(180, 180, 180)' } : {}
-                return (
-                  <div
-                    onClick={(): void => {
-                      if (isOwned === false) {
-                        setSelectedTokenId(n)
-                      }
-                    }}
-                    key={`grid-element-${i}`}
-                    style={style}
-                    title={i.toString()}
-                    className={selectedTokenId === n ? 'selected grid-item' : 'grid-item'}></div>
-                )
-              })}
-            </div>
-          </section>
+          <>
+            <h2>Planet Inventory:</h2>
+            <section>
+              <p>
+                You are able to select not-claimed token ID in range 8001-12000 and click Mint
+                Planet! to mint desired token. Otherwise you will mint random token id. This feature
+                doesn't work for Mint Planet with Loot (only random token could be minted using this
+                method)
+              </p>
+              {selectedTokenId && <div className="selected-id">Selected ID {selectedTokenId}</div>}
+              <div className="grid-container">
+                {fillArrayRange(0, 12000).map((n, i) => {
+                  const isOwned = ownedIds.includes(n)
+                  const style = isOwned ? { backgroundColor: 'rgb(180, 180, 180)' } : {}
+                  return (
+                    <div
+                      onClick={(): void => {
+                        if (isOwned === false) {
+                          setSelectedTokenId(n)
+                        }
+                      }}
+                      key={`grid-element-${i}`}
+                      style={style}
+                      title={i.toString()}
+                      className={selectedTokenId === n ? 'selected grid-item' : 'grid-item'}></div>
+                  )
+                })}
+              </div>
+            </section>
+          </>
         )}
 
         {planetExamples && (
-          <section>
-            {planetExamples.map((e) => (
-              <PlanetCard {...e} key={`planet-${e.tokenId}`} />
-            ))}
-          </section>
+          <>
+            <h2>Planet Examples:</h2>
+            <section className="planet-examples">
+              {planetExamples.map((e) => (
+                <PlanetCard {...e} key={`planet-${e.tokenId}`} />
+              ))}
+            </section>
+          </>
         )}
         <footer>
           <a

@@ -4,7 +4,7 @@ html {
   background-color: #1a1717;
   color: rgb(187, 187, 187);
   font-family: 'Roboto', sans-serif;
-  max-width: 80%;
+  max-width: 95%;
 
   margin: 0 auto;
   min-height: 100vh;
@@ -78,7 +78,10 @@ a:-webkit-any-link {
 }
 
 section {
-  margin: 30px;
+  margin: 20px;
+}
+h2 {
+  margin-top: 40px;
 }
 .grid-container {
   display: flex;
@@ -101,4 +104,16 @@ section {
   text-align: center;
   font-weight: bold;
   color: #921010;
+}
+
+.planet-examples {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.planet-container {
+  img {
+    width: 100%;
+    height: auto;
+  }
 }
