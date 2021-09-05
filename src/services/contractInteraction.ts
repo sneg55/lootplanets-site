@@ -53,7 +53,7 @@ const fillArrayRange = (start: number, end: number): number[] => {
 export const getLootTokenBalance = async (account: string, web3: Web3): Promise<BigNumber> => {
   const lootContract = new web3.eth.Contract(Loot.abi, Loot.address)
   const lootBalance = await lootContract.methods.balanceOf(account).call()
-  return lootBalance
+  return new BigNumber(lootBalance)
 }
 
 export const hasLootToken = async (account: string, web3: Web3): Promise<boolean> => {

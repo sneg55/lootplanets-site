@@ -13,7 +13,9 @@ function App(): React.ReactElement {
 
   React.useEffect(() => {
     if (chainId !== 1) {
-      setErrorMsg(`Unsapported chain Id {chainId}. Please switch to chainId 1`)
+      setErrorMsg(`Unsapported chain Id ${chainId}. Please switch to chainId 1`)
+    } else {
+      errorMsg?.startsWith('Unsapported chain') && setErrorMsg(undefined)
     }
   }, [chainId])
 
@@ -35,7 +37,18 @@ function App(): React.ReactElement {
       setErrorMsg('You should have $LOOT in your wallet to be able to call mintWithLoot')
     }
   }
-  console.log(chainId)
+  const onMainnetSwitchClick = async (): Promise<void> => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (window as any).ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: '0x1' }],
+      })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      e.message && setErrorMsg(e.message)
+    }
+  }
 
   // handle logic to eagerly connect to the injected ethereum provider, if it exists and has granted access already
   const triedEager = useEagerConnect()
@@ -57,7 +70,8 @@ function App(): React.ReactElement {
         turpis tincidunt id aliquet risus feugiat. Et tortor at risus viverra adipiscing at in
         tellus integer. Ut aliquam purus sit amet luctus.
       </p>
-      {!account && (
+      {chainId !== 1 && <Button onClick={onMainnetSwitchClick}>Switch to Ethereum Mainnet</Button>}
+      {!account && chainId === 1 && (
         <div>
           <ConnectWallet onConnectClick={onConnectClick} />
         </div>
