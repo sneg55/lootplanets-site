@@ -173,7 +173,7 @@ function App(): React.ReactElement {
                         setSelectedTokenId(n)
                       }
                     }}
-                    key={i}
+                    key={`grid-element-${i}`}
                     style={style}
                     title={i.toString()}
                     className={selectedTokenId === n ? 'selected grid-item' : 'grid-item'}></div>
