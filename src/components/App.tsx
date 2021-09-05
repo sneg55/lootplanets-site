@@ -108,8 +108,8 @@ function App(): React.ReactElement {
       <main>
         <h1>Planets with Loot</h1>
         <h2>
-          Randomized Planets generated and stored on-chain. Because your Heroes
-          need a place in the Universe to live too.
+          Randomized Planets generated and stored on-chain. Because your Heroes need a place in the
+          Universe to live too.
         </h2>
         <ul>
           <li>
@@ -223,19 +223,12 @@ function App(): React.ReactElement {
             rel="noreferrer noopener">
             Etherscan
           </a>
-          <a
-            href="https://discord.gg/q3RGnzPxbV"
-            target="_blank"
-            rel="noreferrer noopener">
+          <a href="https://discord.gg/q3RGnzPxbV" target="_blank" rel="noreferrer noopener">
             Discord
           </a>
-          <a
-            href="https://www.lootproject.com/resources"
-            target="_blank"
-            rel="noreferrer noopener">
-            Loot Derivatives at lootproject.com 
+          <a href="https://www.lootproject.com/resources" target="_blank" rel="noreferrer noopener">
+            Loot Derivatives at lootproject.com
           </a>
-
         </footer>
       </main>
     </>
