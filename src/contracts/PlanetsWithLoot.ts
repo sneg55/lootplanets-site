@@ -1,5 +1,6 @@
+import { AbiItem } from 'web3-utils'
 const address = '0x15e32bac6c5f89c66631f3a8391bc49eacc03985'
-const abi = [
+const abi: AbiItem[] = [
   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
   {
     anonymous: false,
@@ -313,4 +314,6 @@ const abi = [
   { inputs: [], name: 'withdraw', outputs: [], stateMutability: 'nonpayable', type: 'function' },
 ]
 
-export default { address, abi }
+const PlanetsWithLoot = { address, abi }
+
+export default PlanetsWithLoot
