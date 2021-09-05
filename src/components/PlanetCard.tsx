@@ -3,7 +3,7 @@ import { PlanetData } from '../services/contractInteraction'
 function PlanetCard(props: PlanetData): React.ReactElement {
   return (
     <div className="planet-container">
-      <img width="500" src={props.image} alt="planet" />
+      <img width="250" src={props.image} alt="planet" />
       {/* In the image there is all info you needed is rendered*/}
       {/* <div className="attributes">
         <ul>
