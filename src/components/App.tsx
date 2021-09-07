@@ -111,6 +111,7 @@ function App(): React.ReactElement {
           Randomized Planets generated and stored on-chain. Because your Heroes need a place in the
           Universe to live too.
         </h2>
+        <h3>Planet is a community driven, space-themed lego block for Loot Metaverse.</h3>
         <ul>
           <li>
             Planets ID 0-8000 are free to mint and reserved for{' '}
@@ -122,12 +123,11 @@ function App(): React.ReactElement {
             </a>{' '}
             Holders
           </li>
-
           <li>Planets ID 8001-12000 are open for minting at 0.05 ETH</li>
         </ul>
         <p>
-          Keep in mind that mintWithLoot function would be available only until Thu Sep 30 2021
-          21:59:59 GMT+0000.
+          Keep in mind that mintWithLoot function(aka free mint for Loot holders) would be available
+          only until Thu Sep 30 2021 21:59:59 GMT+0000.
         </p>
         {errorMsg && <ErrorMessage message={errorMsg} />}
         {account && <h4>You are connected as {account}</h4>}
@@ -171,8 +171,7 @@ function App(): React.ReactElement {
               <p>
                 You are able to select not-claimed token ID in range 8001-12000 and click Mint
                 Planet! to mint desired token. Otherwise you will mint random token id. This feature
-                doesn't work for Mint Planet with Loot (only random token could be minted using this
-                method)
+                doesn't work for Mint Planet with Loot.
               </p>
               {selectedTokenId && <div className="selected-id">Selected ID {selectedTokenId}</div>}
               <div className="grid-container">
@@ -209,6 +208,18 @@ function App(): React.ReactElement {
         )}
         <footer>
           <a
+            href="https://etherscan.io/address/0x15e32bac6c5f89c66631f3a8391bc49eacc03985"
+            target="_blank"
+            rel="noreferrer noopener">
+            Etherscan
+          </a>
+          <a
+            href="https://opensea.io/collection/planets-with-loot"
+            target="_blank"
+            rel="noreferrer noopener">
+            Opensea
+          </a>
+          <a
             href="https://github.com/sneg55/lootplanets-site"
             target="_blank"
             rel="noreferrer noopener">
@@ -217,12 +228,7 @@ function App(): React.ReactElement {
           <a href="https://twitter.com/LootPlanets" target="_blank" rel="noreferrer noopener">
             Twitter
           </a>
-          <a
-            href="https://etherscan.io/address/0x15e32bac6c5f89c66631f3a8391bc49eacc03985"
-            target="_blank"
-            rel="noreferrer noopener">
-            Etherscan
-          </a>
+
           <a href="https://discord.gg/q3RGnzPxbV" target="_blank" rel="noreferrer noopener">
             Discord
           </a>
